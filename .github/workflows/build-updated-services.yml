@@ -1,0 +1,42 @@
+name: Build & Push Updated Services
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      changed_services: ${{ steps.filter.outputs.services }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Find changed services
+        id: filter
+        run: |
+          CHANGED_SERVICES=$(git diff --name-only HEAD~1 HEAD | grep "backend/" | cut -d '/' -f2 | sort | uniq | jq -R -s -c 'split("\n")[:-1]')
+          echo "services=${CHANGED_SERVICES}" >> $GITHUB_ENV
+          echo "::set-output name=services::$CHANGED_SERVICES"
+
+  build-and-push:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.changed_services != '[]'
+    strategy:
+      matrix:
+        service: ${{ fromJson(needs.detect-changes.outputs.changed_services) }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          docker build -t your-org/${{ matrix.service }}:latest backend/${{ matrix.service }}/build
+
+      - name: Push to Docker Hub
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker push your-org/${{ matrix.service }}:latest
