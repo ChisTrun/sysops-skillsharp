@@ -9,7 +9,7 @@ jobs:
   detect-changes:
     runs-on: ubuntu-latest
     outputs:
-      changed_services: ${{ env.changed_services }} # Fix output
+      changed_services: ${{ steps.filter.outputs.changed_services }} # Fix cách lấy output
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -19,13 +19,14 @@ jobs:
         run: |
           CHANGED_SERVICES=$(git diff --name-only HEAD~1 HEAD | grep "backend/" | cut -d '/' -f2 | sort | uniq | jq -R -s -c 'split("\n")[:-1]')
           echo "changed_services=$CHANGED_SERVICES" >> $GITHUB_ENV
+          echo "changed_services=$CHANGED_SERVICES" >> $GITHUB_OUTPUT # Để job khác sử dụng
 
   build-and-push:
     needs: detect-changes
-    if: env.changed_services != '[]' # Fix cách gọi biến
+    if: needs.detect-changes.outputs.changed_services != '[]' # Fix cách check output
     strategy:
       matrix:
-        service: ${{ fromJson(env.changed_services) }} # Fix cách gọi biến
+        service: ${{ fromJson(needs.detect-changes.outputs.changed_services) }} # Fix cách gọi biến
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
