@@ -9,7 +9,7 @@ jobs:
   detect-changes:
     runs-on: ubuntu-latest
     outputs:
-      changed_services: ${{ steps.filter.outputs.services }}
+      changed_services: ${{ env.changed_services }} # Fix output
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -18,15 +18,14 @@ jobs:
         id: filter
         run: |
           CHANGED_SERVICES=$(git diff --name-only HEAD~1 HEAD | grep "backend/" | cut -d '/' -f2 | sort | uniq | jq -R -s -c 'split("\n")[:-1]')
-          echo "services=${CHANGED_SERVICES}" >> $GITHUB_ENV
-          echo "::set-output name=services::$CHANGED_SERVICES"
+          echo "changed_services=$CHANGED_SERVICES" >> $GITHUB_ENV
 
   build-and-push:
     needs: detect-changes
-    if: needs.detect-changes.outputs.changed_services != '[]'
+    if: env.changed_services != '[]' # Fix cách gọi biến
     strategy:
       matrix:
-        service: ${{ fromJson(needs.detect-changes.outputs.changed_services) }}
+        service: ${{ fromJson(env.changed_services) }} # Fix cách gọi biến
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
