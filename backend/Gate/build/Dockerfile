@@ -7,4 +7,3 @@ COPY ./envoy.yaml .
 EXPOSE 8081
 
 CMD ["envoy", "-c", "/etc/envoy/envoy.yaml"]
-
