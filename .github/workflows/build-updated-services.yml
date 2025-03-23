@@ -27,12 +27,17 @@ jobs:
           # In ra giá trị để debug
           echo "Detected services: $CHANGED_SERVICES"
           
+          # Kiểm tra nếu rỗng thì gán "[]"
+          if [[ -z "$CHANGED_SERVICES" || "$CHANGED_SERVICES" == "null" ]]; then
+            CHANGED_SERVICES="[]"
+          fi
+
           echo "changed_services=$CHANGED_SERVICES" >> $GITHUB_ENV
           echo "changed_services=$CHANGED_SERVICES" >> $GITHUB_OUTPUT
 
   build-and-push:
     needs: detect-changes
-    if: needs.detect-changes.outputs.changed_services != '[]' # Kiểm tra output hợp lệ
+    if: needs.detect-changes.outputs.changed_services != '[]' # Đảm bảo có service thay đổi
     strategy:
       matrix:
         service: ${{ fromJson(needs.detect-changes.outputs.changed_services) }}
@@ -45,12 +50,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Build Docker image
-        if: matrix.service != '' # Đảm bảo có giá trị hợp lệ
         run: |
           docker build -t your-org/${{ matrix.service }}:latest backend/${{ matrix.service }}/build
 
       - name: Push to Docker Hub
-        if: matrix.service != '' # Đảm bảo không push nếu giá trị rỗng
         run: |
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
           docker push your-org/${{ matrix.service }}:latest
