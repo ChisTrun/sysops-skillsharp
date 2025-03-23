@@ -45,4 +45,4 @@ jobs:
       - name: Push to Docker Hub
         run: |
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-          docker push your-org/${{ matrix.service }}:latest
+          docker push  ${{ secrets.DOCKER_APP }}/$(echo ${{ matrix.service }} | tr '[:upper:]' '[:lower:]'):latest
