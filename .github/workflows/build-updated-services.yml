@@ -11,8 +11,10 @@ jobs:
     outputs:
       changed_services: ${{ steps.filter.outputs.changed_services }} # Fix cách lấy output
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
 
       - name: Find changed services
         id: filter
