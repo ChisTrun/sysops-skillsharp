@@ -9,50 +9,36 @@ jobs:
   detect-changes:
     runs-on: ubuntu-latest
     outputs:
-      changed_services: ${{ steps.filter.outputs.changed_services }}
+      changed_services: ${{ steps.filter.outputs.changed_services }} # Fix cách lấy output
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-
-      - name: Debug Git Diff
-        run: |
-          echo "Changed files:"
-          git diff --name-only HEAD~1 HEAD
 
       - name: Find changed services
         id: filter
         run: |
           CHANGED_SERVICES=$(git diff --name-only HEAD~1 HEAD | grep "backend/" | cut -d '/' -f2 | sort | uniq | jq -R -s -c 'split("\n")[:-1]')
-          
-          # In ra giá trị để debug
           echo "Detected services: $CHANGED_SERVICES"
-          
+
           echo "changed_services=$CHANGED_SERVICES" >> $GITHUB_ENV
-          echo "changed_services=$CHANGED_SERVICES" >> $GITHUB_OUTPUT
+          echo "changed_services=$CHANGED_SERVICES" >> $GITHUB_OUTPUT # Để job khác sử dụng
 
   build-and-push:
     needs: detect-changes
-    if: needs.detect-changes.outputs.changed_services != '[]' # Kiểm tra output hợp lệ
+    if: needs.detect-changes.outputs.changed_services != '[]' # Fix cách check output
     strategy:
       matrix:
-        service: ${{ fromJson(needs.detect-changes.outputs.changed_services) }}
+        service: ${{ fromJson(needs.detect-changes.outputs.changed_services) }} # Fix cách gọi biến
     runs-on: ubuntu-latest
     steps:
-      - name: Debug matrix
-        run: echo "Building service: ${{ matrix.service }}"
-
       - name: Checkout repo
         uses: actions/checkout@v4
 
       - name: Build Docker image
-        if: matrix.service != '' # Đảm bảo có giá trị hợp lệ
         run: |
           docker build -t your-org/${{ matrix.service }}:latest backend/${{ matrix.service }}/build
 
       - name: Push to Docker Hub
-        if: matrix.service != '' # Đảm bảo không push nếu giá trị rỗng
         run: |
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
           docker push your-org/${{ matrix.service }}:latest
-
-
