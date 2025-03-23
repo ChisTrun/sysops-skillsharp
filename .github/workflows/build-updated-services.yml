@@ -38,7 +38,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          docker build -t your-org/${{ matrix.service }}:latest backend/${{ matrix.service }}/build
+          docker build -t ${{ secrets.DOCKER_APP }}/$(echo ${{ matrix.service }} | tr '[:upper:]' '[:lower:]'):latest backend/${{ matrix.service }}/build
 
       - name: Push to Docker Hub
         run: |
