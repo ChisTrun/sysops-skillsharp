@@ -6,3 +6,5 @@ COPY . .
 
 CMD ["./server", "-c", "./config/config.yaml"] 
 
+
+
