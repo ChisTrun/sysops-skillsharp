@@ -48,11 +48,13 @@ jobs:
           docker push  ${{ secrets.DOCKER_APP }}/$(echo ${{ matrix.service }} | tr '[:upper:]' '[:lower:]'):latest
 
   restart-deployments:
-    needs: build-and-push
-    if: detect-changes.detect-changes.outputs.changed_services != '[]'
+    needs:
+      - detect-changes
+      - build-and-push # Đợi build-and-push hoàn thành
+    if: needs.detect-changes.outputs.changed_services != '[]'
     strategy:
       matrix:
-        service: ${{ fromJson(detect-change.detect-changes.outputs.changed_services) }}
+        service: ${{ fromJson(needs.detect-changes.outputs.changed_services) }}
     runs-on: self-hosted
     steps:
       - name: Restart Kubernetes Deployment
