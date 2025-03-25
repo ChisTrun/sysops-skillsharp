@@ -52,7 +52,7 @@ jobs:
     if: detect-changes.detect-changes.outputs.changed_services != '[]'
     strategy:
       matrix:
-        service: ${{ fromJson(needs.detect-changes.outputs.changed_services) }}
+        service: ${{ fromJson(detect-change.detect-changes.outputs.changed_services) }}
     runs-on: self-hosted
     steps:
       - name: Restart Kubernetes Deployment
