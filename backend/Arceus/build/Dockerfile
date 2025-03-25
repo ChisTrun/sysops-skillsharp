@@ -4,5 +4,4 @@ WORKDIR /app
 
 COPY . .
 
-CMD ["./server", "-c", "./config/config.yaml"] 
-
+CMD ["./server", "-c", "./config/config.yaml"]
