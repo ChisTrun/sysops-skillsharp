@@ -25,10 +25,6 @@ jobs:
           echo "changed_services=$CHANGED_SERVICES" >> $GITHUB_ENV
           echo "changed_services=$CHANGED_SERVICES" >> $GITHUB_OUTPUT # Để job khác sử dụng
 
-      - name: Debug changed services
-        run: |
-          echo "Changed services: ${{ steps.filter.outputs.changed_services }}"
-
   build-and-push:
     needs: detect-changes
     if: needs.detect-changes.outputs.changed_services != '[]' # Fix cách check output
@@ -53,23 +49,17 @@ jobs:
 
   restart-deployments:
     needs: build-and-push
+    if: needs.detect-changes.outputs.changed_services != '[]'
+    strategy:
+      matrix:
+        service: ${{ fromJson(needs.detect-changes.outputs.changed_services) }}
     runs-on: self-hosted
     steps:
-      - name: Restart Kubernetes Deployments
+      - name: Restart Kubernetes Deployment
         run: |
-
-          echo "Raw SERVICES_JSON='${{ needs.detect-changes.outputs.changed_services }}'"
-
-          SERVICES_JSON='${{ needs.detect-changes.outputs.changed_services }}'
-          if [[ "$SERVICES_JSON" != "[]" && "$SERVICES_JSON" != "null" ]]; then
-            for service in $(echo $SERVICES_JSON | jq -r '.[]'); do
-              SERVICE_NAME=$(echo $service | tr '[:upper:]' '[:lower:]')
-              echo "Restarting deployment: $SERVICE_NAME"
-              kubectl rollout restart deployment $SERVICE_NAME
-            done
-          else
-            echo "No services changed, skipping restart."
-          fi
+          SERVICE_NAME=$(echo ${{ matrix.service }} | tr '[:upper:]' '[:lower:]')
+          echo "Restarting deployment: $SERVICE_NAME"
+          kubectl rollout restart deployment $SERVICE_NAME
 
       - name: Check pod status
         run: |
