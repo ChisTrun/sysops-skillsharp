@@ -53,12 +53,17 @@ jobs:
     steps:
       - name: Restart Kubernetes Deployments
         run: |
-          for service in ${{ fromJson(needs.detect-changes.outputs.changed_services) }}; do
-            SERVICE_NAME=$(echo $service | tr '[:upper:]' '[:lower:]') # Chuyển thành chữ thường
-            echo "Restarting deployment: $SERVICE_NAME"
-            kubectl rollout restart deployment $SERVICE_NAME
-          done
+          SERVICES_JSON='${{ needs.detect-changes.outputs.changed_services }}'
+          if [[ "$SERVICES_JSON" != "[]" && "$SERVICES_JSON" != "null" ]]; then
+            for service in $(echo $SERVICES_JSON | jq -r '.[]'); do
+              SERVICE_NAME=$(echo $service | tr '[:upper:]' '[:lower:]')
+              echo "Restarting deployment: $SERVICE_NAME"
+              kubectl rollout restart deployment $SERVICE_NAME
+            done
+          else
+            echo "No services changed, skipping restart."
+          fi
 
-          # Kiểm tra lại trạng thái pod
-          echo "Checking pod status..."
+      - name: Check pod status
+        run: |
           kubectl get pods -o wide
