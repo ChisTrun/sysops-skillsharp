@@ -46,3 +46,19 @@ jobs:
         run: |
           echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
           docker push  ${{ secrets.DOCKER_APP }}/$(echo ${{ matrix.service }} | tr '[:upper:]' '[:lower:]'):latest
+
+  restart-deployments:
+    needs: build-and-push
+    runs-on: self-hosted
+    steps:
+      - name: Restart Kubernetes Deployments
+        run: |
+          for service in ${{ fromJson(needs.detect-changes.outputs.changed_services) }}; do
+            SERVICE_NAME=$(echo $service | tr '[:upper:]' '[:lower:]') # Chuyển thành chữ thường
+            echo "Restarting deployment: $SERVICE_NAME"
+            kubectl rollout restart deployment $SERVICE_NAME
+          done
+
+          # Kiểm tra lại trạng thái pod
+          echo "Checking pod status..."
+          kubectl get pods -o wide
