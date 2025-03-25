@@ -24,6 +24,10 @@ jobs:
 
           echo "changed_services=$CHANGED_SERVICES" >> $GITHUB_ENV
           echo "changed_services=$CHANGED_SERVICES" >> $GITHUB_OUTPUT # Để job khác sử dụng
+      
+      - name: Debug changed services
+        run: |
+          echo "Changed services: ${{ steps.filter.outputs.changed_services }}"
 
   build-and-push:
     needs: detect-changes
