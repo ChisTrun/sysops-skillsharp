@@ -45,4 +45,4 @@ frontend:
 
 mailer:
   Domain: "twistedfate:8080"
-  Endpoint: "twistedfate/mailer/send"
+  Endpoint: "/twistedfate/mailer/send"
