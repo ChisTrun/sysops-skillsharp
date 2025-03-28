@@ -44,5 +44,5 @@ frontend:
   ResetPasswordEndpoint: "/resetpassword"
 
 mailer:
-  Domain: "twistedfate:8080"
+  Domain: "http://twistedfate:8080"
   Endpoint: "/twistedfate/mailer/send"
