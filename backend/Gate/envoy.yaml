@@ -253,7 +253,7 @@ static_resources:
                               "@type": type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthzPerRoute
                               disabled: true
                         - match:
-                            prefix: /bulbasaur/
+                            prefix: /bulbasaur
                           route:
                             cluster: bulbasaur_http_cluster
                           typed_per_filter_config:
@@ -265,7 +265,7 @@ static_resources:
                           route:
                             cluster: bulbasaur_cluster
                         - match:
-                            prefix: /ivysaur/
+                            prefix: /ivysaur
                           route:
                             cluster: bulbasaur_http_cluster
                         - match:
