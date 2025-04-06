@@ -201,15 +201,15 @@ static_resources:
                             key: x-request-id
                             value: "%REQ(X-REQUEST-ID)%"
                       routes:
-                        # - match:
-                        #     prefix: /ws
-                        #   route:
-                        #     prefix_rewrite: /
-                        #     cluster: soybean_http_cluster
-                        #   typed_per_filter_config:
-                        #     envoy.filters.http.ext_authz:
-                        #       "@type": type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthzPerRoute
-                        #       disabled: true
+                        - match:
+                            prefix: /ws
+                          route:
+                            prefix_rewrite: /
+                            cluster: thresh_cluster
+                          typed_per_filter_config:
+                            envoy.filters.http.ext_authz:
+                              "@type": type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthzPerRoute
+                              disabled: true
     - name: listener_main
       address:
         socket_address:
