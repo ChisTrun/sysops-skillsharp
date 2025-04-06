@@ -216,7 +216,7 @@ static_resources:
                             value: "%REQ(X-REQUEST-ID)%"
                       routes:
                         - match:
-                            prefix: /ws
+                            prefix: /
                           route:
                             prefix_rewrite: /
                             cluster: thresh_ws_cluster
