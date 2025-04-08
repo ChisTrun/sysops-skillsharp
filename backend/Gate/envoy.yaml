@@ -216,9 +216,9 @@ static_resources:
                             value: "%REQ(X-REQUEST-ID)%"
                       routes:
                         - match:
-                            prefix: /
+                            prefix: /current 
                           route:
-                            prefix_rewrite: /
+                            # prefix_rewrite: /
                             cluster: thresh_ws_cluster
                           typed_per_filter_config:
                             envoy.filters.http.ext_authz:
