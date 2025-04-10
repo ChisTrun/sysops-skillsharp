@@ -1,3 +1,3 @@
-FROM skillsharp123/skillsharp_thresh:v0.0.0
+FROM skillsharp123/skillsharp_thresh:v1.2.5
 
 CMD ["npm", "run", "prod"]
