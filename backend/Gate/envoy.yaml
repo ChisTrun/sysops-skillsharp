@@ -249,7 +249,7 @@ static_resources:
                       name: cms_service
                       routes:
                         - match:
-                            prefix: /thresh/
+                            prefix: /thresh
                           route:
                             cluster: thresh_cluster
                             prefix_rewrite: /
