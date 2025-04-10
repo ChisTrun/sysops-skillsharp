@@ -252,7 +252,7 @@ static_resources:
                             prefix: /thresh
                           route:
                             cluster: thresh_cluster
-                            # prefix_rewrite: /
+                            prefix_rewrite: /api
                             timeout: 60s
                           typed_per_filter_config:
                             envoy.filters.http.ext_authz:
