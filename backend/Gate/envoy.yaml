@@ -107,6 +107,20 @@ static_resources:
       name: ekko_http_cluster
       type: logical_dns
 
+    - connect_timeout: 1s
+      lb_policy: round_robin
+      load_assignment:
+        cluster_name: karma_cluster
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: karma
+                      port_value: 8080
+      name: karma_cluster
+      type: logical_dns
+
   listeners:
     - name: listener_websocket
       address:
@@ -252,6 +266,16 @@ static_resources:
                             prefix: /thresh
                           route:
                             cluster: thresh_cluster
+                            prefix_rewrite: /api
+                            timeout: 60s
+                          typed_per_filter_config:
+                            envoy.filters.http.ext_authz:
+                              "@type": type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthzPerRoute
+                              disabled: true
+                        - match:
+                            prefix: /karma
+                          route:
+                            cluster: karma_cluster
                             prefix_rewrite: /api
                             timeout: 60s
                           typed_per_filter_config:
