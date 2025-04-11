@@ -1,5 +1,7 @@
 FROM skillsharp123/karma
 
+WORKDIR /app
+
 COPY . .
 
 EXPOSE 8080
