@@ -263,6 +263,18 @@ static_resources:
                       name: cms_service
                       routes:
                         - match:
+                            prefix: /thresh/manager
+                          route:
+                            cluster: thresh_cluster
+                            prefix_rewrite: /api/manager
+                            timeout: 60s
+                        - match:
+                            prefix: /thresh/candidate
+                          route:
+                            cluster: thresh_cluster
+                            prefix_rewrite: /api/candidate
+                            timeout: 60s
+                        - match:
                             prefix: /thresh
                           route:
                             cluster: thresh_cluster
