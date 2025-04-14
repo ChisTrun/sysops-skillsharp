@@ -15,7 +15,7 @@ logger:
   level: DEBUG
 
 rabbitmq: 
-  address: 0.0.0.0
+  address: 10.148.0.11
   port: 5672  
   username: ${RABBITMQ_USERNAME}
   password: ${RABBITMQ_PASSWORD}
