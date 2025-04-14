@@ -275,6 +275,12 @@ static_resources:
                             prefix_rewrite: /api/candidate
                             timeout: 60s
                         - match:
+                            prefix: /thresh/user
+                          route:
+                            cluster: thresh_cluster
+                            prefix_rewrite: /api/user
+                            timeout: 60s
+                        - match:
                             prefix: /thresh
                           route:
                             cluster: thresh_cluster
