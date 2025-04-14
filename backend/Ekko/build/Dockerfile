@@ -1,4 +1,4 @@
-FROM skillsharp123/ekko:v1.3.6
+FROM skillsharp123/ekko:v1.3.7
 
 WORKDIR /app
 
