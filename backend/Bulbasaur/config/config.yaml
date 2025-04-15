@@ -40,8 +40,8 @@ google:
   ClientID: ${GOOGLE_CLIENT_ID}
 
 frontend:
-  Url: "http://localhost:5173"
-  ResetPasswordEndpoint: "/resetpassword"
+  Url: "http://skillsharp.software"
+  ResetPasswordEndpoint: "/auth/new-password"
 
 mailer:
   Domain: "http://twistedfate:8080"
