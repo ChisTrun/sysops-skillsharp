@@ -34,6 +34,7 @@ mistral:
   tag: "mistrals"
   models:
     - "ministral-8b-latest"
+    - "mistral-large-latest"
   endpoint: ${MISTRAL_ENDPOINT}
   api_key: ${MISTRAL_API_KEY}
   enable: true
