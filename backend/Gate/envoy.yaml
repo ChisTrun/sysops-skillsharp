@@ -365,6 +365,15 @@ static_resources:
                               "@type": type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthzPerRoute
                               disabled: true
                         - match:
+                            prefix: /graves/verify-payment-webhook
+                          route:
+                            cluster: graves_cluster
+                            timeout: 60s
+                          typed_per_filter_config:
+                            envoy.filters.http.ext_authz:
+                              "@type": type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthzPerRoute
+                              disabled: true
+                        - match:
                             prefix: /graves
                           route:
                             cluster: graves_cluster
