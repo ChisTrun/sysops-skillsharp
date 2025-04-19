@@ -24,6 +24,20 @@ static_resources:
     - connect_timeout: 1s
       lb_policy: round_robin
       load_assignment:
+        cluster_name: graves_cluster
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: graves
+                      port_value: 8080
+      name: graves_cluster
+      type: logical_dns
+    
+    - connect_timeout: 1s
+      lb_policy: round_robin
+      load_assignment:
         cluster_name: thresh_ws_cluster
         endpoints:
           - lb_endpoints:
@@ -350,6 +364,10 @@ static_resources:
                             envoy.filters.http.ext_authz:
                               "@type": type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthzPerRoute
                               disabled: true
+                        - match:
+                            prefix: /graves
+                          route:
+                            cluster: graves_cluster
                         - match:
                             prefix: /darius/
                           route:
