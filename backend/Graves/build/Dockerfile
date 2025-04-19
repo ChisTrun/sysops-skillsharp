@@ -1,4 +1,4 @@
-FROM skillsharp123/graves:v1.4.5
+FROM skillsharp123/graves:v1.0.1
 
 WORKDIR /app
 
