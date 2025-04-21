@@ -19,7 +19,7 @@ bulbasaur:
   port: 8080
 
 rabbitmq: 
-  address: 10.148.0.11
+  address: 10.148.0.2
   port: 5672  
   username: ${RABBITMQ_USERNAME}
   password: ${RABBITMQ_PASSWORD}
