@@ -1,6 +1,6 @@
 server:
   host: "0.0.0.0"
-  port: 8080
+  port: 5000
 
 tts:
   edge_tts:
@@ -43,3 +43,5 @@ lip_sync:
   tool_dir: "Rhubarb"
   speedup_factor: 2.0
   closed_cue_duration: 0.1
+path:
+  template: "service/template.json"
