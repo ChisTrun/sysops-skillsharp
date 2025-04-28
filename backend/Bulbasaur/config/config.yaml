@@ -32,7 +32,7 @@ redis:
 
 auth:
   AccessKey: ${AUTH_ACCESS_KEY}
-  AccessExp: 120
+  AccessExp: 0.2
   RefreshKey: ${AUTH_REFRESH_KEY}
   RefreshExp: 120
 
