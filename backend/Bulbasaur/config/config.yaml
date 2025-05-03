@@ -32,9 +32,9 @@ redis:
 
 auth:
   AccessKey: ${AUTH_ACCESS_KEY}
-  AccessExp: 1
+  AccessExp: 15
   RefreshKey: ${AUTH_REFRESH_KEY}
-  RefreshExp: 120
+  RefreshExp: 1200
 
 google:
   ClientID: ${GOOGLE_CLIENT_ID}
