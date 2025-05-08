@@ -1,4 +1,4 @@
-FROM skillsharp123/arceus:v1.0.7
+FROM skillsharp123/arceus:v1.0.8
 
 WORKDIR /app
 
