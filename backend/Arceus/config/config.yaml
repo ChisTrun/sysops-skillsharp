@@ -33,6 +33,7 @@ redis:
 mistral:
   tag: "mistrals"
   models:
+    - "mistral-small-latest"
     - "ministral-8b-latest"
     - "mistral-large-latest"
   endpoint: ${MISTRAL_ENDPOINT}
