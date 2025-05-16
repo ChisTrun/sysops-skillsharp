@@ -4,8 +4,8 @@ WORKDIR /app
 
 COPY . .
 
-EXPOSE 3140
-EXPOSE 3141
+EXPOSE 8081
+EXPOSE 8080
 
 CMD ["./server", "-c", "./config/config.yaml"]
 

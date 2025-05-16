@@ -124,6 +124,20 @@ static_resources:
     - connect_timeout: 1s
       lb_policy: round_robin
       load_assignment:
+        cluster_name: irelia_http_cluster
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: irelia
+                      port_value: 8081
+      name: irelia_http_cluster
+      type: logical_dns
+
+    - connect_timeout: 1s
+      lb_policy: round_robin
+      load_assignment:
         cluster_name: karma_cluster
         endpoints:
           - lb_endpoints:
@@ -373,6 +387,18 @@ static_resources:
                             envoy.filters.http.ext_authz:
                               "@type": type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthzPerRoute
                               disabled: true
+
+                        - match:
+                            prefix: /irelia/
+                          route:
+                            cluster: irelia_http_cluster
+                            prefix_rewrite: /
+                            timeout: 60s
+                          typed_per_filter_config:
+                            envoy.filters.http.ext_authz:
+                              "@type": type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthzPerRoute
+                              disabled: true
+                        
                         - match:
                             prefix: /graves
                           route:
