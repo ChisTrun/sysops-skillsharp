@@ -1,0 +1,49 @@
+server:
+  host: 0.0.0.0
+  port: 3140
+  gwport: 3141
+
+karma:
+  genurl: "https://skillsharp-api.icu/karma/lip-sync"
+  scrurl: "https://skillsharp-api.icu/karma/audio-score"
+
+darius:
+  genurl: "https://skillsharp-api.icu/darius/v1/suggest_interview_question"
+  scrurl: "https://skillsharp-api.icu/darius/v1/score_interview"
+
+db:
+  auth_method: ${DB_AUTH_METHOD}
+  host: ${DB_HOST}
+  port: ${DB_PORT}
+  user: ${DB_USER}
+  password: ${DB_PASSWORD}
+  name: ${DB_NAME}
+  aws_region: ${DB_AWS_REGION}
+  debug: false
+  tracing_enabled: false
+  max_idle_conns: 5
+  max_open_conns: 5
+  conn_max_life_time: 86400
+  conn_max_idle_time: 3600
+
+rabbitmq: 
+  address: 0.0.0.0
+  port: 5672  
+  username: ${RABBITMQ_USERNAME}
+  password: ${RABBITMQ_PASSWORD}
+  consume_queue: consume_queue
+  public_queue: public_queue
+  max_consumer: 5
+  expire_time: 86400000
+
+logger:
+  level: DEBUG
+  pretty: true
+
+redis:
+  address: ${REDIS_ADDRESS}
+  namespace: ${REDIS_NAMESPACE}
+
+questions_to_prepare: 1
+
+context_qa_length: 5
