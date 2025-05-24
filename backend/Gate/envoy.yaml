@@ -131,7 +131,7 @@ static_resources:
                   address:
                     socket_address:
                       address: irelia
-                      port_value: 8081
+                      port_value: 8080
       name: irelia_http_cluster
       type: logical_dns
 
