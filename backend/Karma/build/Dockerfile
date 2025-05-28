@@ -1,4 +1,4 @@
-FROM skillsharp123/karma:v1.1.6
+FROM skillsharp123/karma:v1.1.7
 
 WORKDIR /app
 
