@@ -1,0 +1,68 @@
+name: Build & Push Updated Services
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      changed_services: ${{ steps.filter.outputs.changed_services }} # Fix cách lấy output
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Find changed services
+        id: filter
+        run: |
+          CHANGED_SERVICES=$(git diff --name-only HEAD~1 HEAD | grep "frontend/" | cut -d '/' -f2 | sort | uniq | jq -R -s -c 'split("\n")[:-1]')
+          echo "Detected services: $CHANGED_SERVICES"
+
+          echo "changed_services=$CHANGED_SERVICES" >> $GITHUB_ENV
+          echo "changed_services=$CHANGED_SERVICES" >> $GITHUB_OUTPUT # Để job khác sử dụng
+
+  build-and-push:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.changed_services != '[]' # Fix cách check output
+    strategy:
+      matrix:
+        service: ${{ fromJson(needs.detect-changes.outputs.changed_services) }} # Fix cách gọi biến
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          docker build -f frontend/${{ matrix.service }}/build/Dockerfile \
+            -t ${{ secrets.DOCKER_APP }}/$(echo ${{ matrix.service }} | tr '[:upper:]' '[:lower:]'):latest \
+            frontend/${{ matrix.service }}
+
+      - name: Push to Docker Hub
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+          docker push  ${{ secrets.DOCKER_APP }}/$(echo ${{ matrix.service }} | tr '[:upper:]' '[:lower:]'):latest
+
+  restart-deployments:
+    needs:
+      - detect-changes
+      - build-and-push # Đợi build-and-push hoàn thành
+    if: needs.detect-changes.outputs.changed_services != '[]'
+    strategy:
+      matrix:
+        service: ${{ fromJson(needs.detect-changes.outputs.changed_services) }}
+    runs-on: self-hosted
+    steps:
+      - name: Restart Kubernetes Deployment
+        run: |
+          SERVICE_NAME=$(echo ${{ matrix.service }} | tr '[:upper:]' '[:lower:]')
+          echo "Restarting deployment: $SERVICE_NAME"
+          kubectl rollout restart deployment $SERVICE_NAME
+
+      - name: Check pod status
+        run: |
+          kubectl get pods -o wide
