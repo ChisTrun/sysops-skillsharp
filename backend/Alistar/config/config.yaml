@@ -2,6 +2,6 @@ domain: multi_service_ratelimit
 descriptors:
   - key: user_id
     rate_limit:
-      unit: minute
-      requests_per_unit: 3
+      unit: day
+      requests_per_unit: 2
     
