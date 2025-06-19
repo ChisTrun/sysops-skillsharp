@@ -423,9 +423,6 @@ static_resources:
                                   - request_header:
                                       header_name: x-user-id
                                       descriptor_key: user_id
-                                  - generic_key:
-                                      descriptor_value: darius
-                           
                 http_filters:
                   - name: envoy.filters.http.grpc_web
                     typed_config:
