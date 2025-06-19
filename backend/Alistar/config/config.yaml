@@ -3,5 +3,5 @@ descriptors:
   - key: user_id
     rate_limit:
       unit: minute
-      requests_per_unit: 100
+      requests_per_unit: 3
     
