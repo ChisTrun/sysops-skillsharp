@@ -1,4 +1,4 @@
-FROM envoyproxy/ratelimit:latest
+FROM envoyproxy/ratelimit:master
 
 # Copy thư mục config chứa file config.yaml vào image
 COPY config /data
