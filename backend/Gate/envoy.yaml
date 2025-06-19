@@ -418,16 +418,7 @@ static_resources:
                             cluster: darius_cluster
                             prefix_rewrite: /
                             timeout: 60s
-                          typed_per_filter_config:
-                            envoy.filters.http.ratelimit:
-                              "@type": type.googleapis.com/envoy.extensions.filters.http.ratelimit.v3.RateLimitPerRoute
-                              rate_limit:
-                                actions:
-                                  - request_header:
-                                      header_name: x-user-id
-                                      descriptor_key: user_id
-                                  - generic_key:
-                                      descriptor_value: darius
+                 
                             
                 http_filters:
                   - name: envoy.filters.http.grpc_web
