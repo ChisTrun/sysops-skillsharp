@@ -1,18 +1,21 @@
 # Giai đoạn 1: Build binary từ mã nguồn
 FROM golang:1.21-alpine AS builder
 
-# Cài đặt các công cụ cần thiết
-RUN apk add --no-cache git
+# Cài đặt các công cụ cần thiết (bao gồm protoc nếu cần)
+RUN apk add --no-cache git protoc
 
 # Thiết lập thư mục làm việc
 WORKDIR /app
 
-# Clone mã nguồn envoyproxy/ratelimit
-RUN git clone https://github.com/envoyproxy/ratelimit.git .
+# Clone mã nguồn envoyproxy/ratelimit (checkout tag cụ thể để tránh lỗi phiên bản)
+RUN git clone https://github.com/envoyproxy/ratelimit.git . && \
+    git checkout v1.5.0  # Checkout một phiên bản ổn định
+
+# Khởi tạo và tải module
+RUN go mod tidy
 
 # Build binary
-RUN go mod tidy && \
-    go build -o ratelimit ./cmd/ratelimit
+RUN go build -o ratelimit ./cmd/ratelimit
 
 # Giai đoạn 2: Tạo image nhẹ để chạy
 FROM alpine:3.18
@@ -29,11 +32,8 @@ RUN mkdir /config
 # Copy tệp cấu hình từ thư mục config
 COPY config/config.yaml /config/ratelimit-config.yaml
 
-# Đặt biến môi trường cho Redis (có thể override qua Helm hoặc Kubernetes)
-ENV REDIS_AUTH=Skillsharp@123
-
 # Expose cổng mặc định của ratelimit
 EXPOSE 8081
 
-# Lệnh chạy dịch vụ
+# Lệnh chạy dịch vụ, sử dụng biến môi trường từ bên ngoài
 CMD ["/usr/local/bin/ratelimit", "-config=/config/ratelimit-config.yaml"]
