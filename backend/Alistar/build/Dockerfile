@@ -7,10 +7,9 @@ WORKDIR /app
 # Sao chép file cấu hình tùy chỉnh (đảm bảo config.yaml tồn tại cùng thư mục với Dockerfile)
 COPY /config/config.yaml /app/config.yaml
 
-# Cài đặt các phụ thuộc cần thiết (tùy chọn, để debug hoặc mở rộng)
-RUN apt-get update && apt-get install -y \
-    curl \
-    && rm -rf /var/lib/apt/lists/* /
+RUN if [ -f /etc/alpine-release ]; then \
+    apk update && apk add --no-cache curl; \
+    fi
 
 # Expose các cổng mặc định cho Envoy Rate Limit (8080 cho gRPC, 8081 cho HTTP)
 EXPOSE 8080 8081
