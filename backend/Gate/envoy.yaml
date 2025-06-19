@@ -420,7 +420,7 @@ static_resources:
                             timeout: 60s
                             rate_limits:
                               - actions:
-                                  - request_header:
+                                  - request_headers:
                                       header_name: x-user-id
                                       descriptor_key: user_id
                 http_filters:
