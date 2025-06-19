@@ -403,16 +403,7 @@ static_resources:
                             cluster: darius_cluster
                             prefix_rewrite: /
                             timeout: 60s
-                            rate_limits:
-                            - actions:
-                              - header_value_match:
-                                  descriptor_value: "user_id_limit"
-                                  headers:
-                                  - name: x-user-id
-                                    string_match:
-                                      safe_regex:
-                                        google_re2: {}
-                                        regex: ".*"
+                            
                 http_filters:
                   - name: envoy.filters.http.grpc_web
                     typed_config:
@@ -428,24 +419,6 @@ static_resources:
                           cluster_name: bulbasaur_cluster
                         timeout: 5s
                       transport_api_version: V3
-                  - name: envoy.filters.http.local_ratelimit
-                    typed_config:
-                      "@type": type.googleapis.com/envoy.extensions.filters.http.local_ratelimit.v3.LocalRateLimit
-                      stat_prefix: http_local_rate_limit
-                      token_bucket:
-                        max_tokens: 100
-                        tokens_per_fill: 100
-                        fill_interval: 60s
-                      filter_enabled:
-                        runtime_key: local_rate_limit.enabled
-                        default_value:
-                          numerator: 100
-                          denominator: HUNDRED
-                      filter_enforced:
-                        runtime_key: local_rate_limit.enforced
-                        default_value:
-                          numerator: 100
-                          denominator: HUNDRED
                   - name: envoy.filters.http.router
                     typed_config:
                       "@type": type.googleapis.com/envoy.extensions.filters.http.router.v3.Router
