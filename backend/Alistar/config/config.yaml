@@ -1,10 +1,7 @@
 domain: multi_service_ratelimit
 descriptors:
-  - key: service
-    value: darius
-    descriptors:
-      - key: user_id
-        rate_limit:
-          unit: MINUTE
-          requests_per_unit: 100
-
+  - key: user_id
+    rate_limit:
+      unit: minute
+      requests_per_unit: 100
+    
