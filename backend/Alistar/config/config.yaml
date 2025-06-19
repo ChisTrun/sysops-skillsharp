@@ -1,0 +1,16 @@
+domain: multi_service_ratelimit
+descriptors:
+  - key: service
+    value: darius
+    descriptors:
+      - key: user_id
+        rate_limit:
+          unit: MINUTE
+          requests_per_unit: 100
+          
+backend:
+  type: redis
+  redis:
+    url: redis://:Skillsharp@123@10.128.0.2:6379
+log_level: info
+near_limit_ratio: 0.8
