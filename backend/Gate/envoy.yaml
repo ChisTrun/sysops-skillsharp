@@ -149,6 +149,20 @@ static_resources:
       name: karma_cluster
       type: logical_dns
 
+    - connect_timeout: 1s
+      lb_policy: round_robin
+      load_assignment:
+        cluster_name: storage_cluster
+        endpoints:
+          - lb_endpoints:
+              - endpoint:
+                  address:
+                    socket_address:
+                      address: storage
+                      port_value: 8080
+      name: storage_cluster
+      type: logical_dns
+
     - name: ratelimit_cluster
       type: strict_dns
       connect_timeout: 0.25s
@@ -406,6 +420,22 @@ static_resources:
                             prefix: /irelia/
                           route:
                             cluster: irelia_http_cluster
+                            prefix_rewrite: /
+                            timeout: 60s
+                        - match:
+                            prefix: /storage/image
+                          route:
+                            cluster: storage_cluster
+                            prefix_rewrite: /image
+                            timeout: 60s
+                          typed_per_filter_config:
+                            envoy.filters.http.ext_authz:
+                              "@type": type.googleapis.com/envoy.extensions.filters.http.ext_authz.v3.ExtAuthzPerRoute
+                              disabled: true
+                        - match:
+                            prefix: /storage/
+                          route:
+                            cluster: storage_cluster
                             prefix_rewrite: /
                             timeout: 60s
                         - match:
