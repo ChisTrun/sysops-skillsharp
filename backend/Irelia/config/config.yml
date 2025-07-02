@@ -8,8 +8,8 @@ karma:
   scrurl: "https://skillsharp-api.icu/karma/audio-score"
 
 darius:
-  genurl: "http://darius:8081/v1/suggest_interview_question"
-  scrurl: "http://darius:8081/v1/score_interview"
+  genurl: "http://darius:8080/v1/suggest_interview_question"
+  scrurl: "http://darius:8080/v1/score_interview"
 
 db:
   auth_method: ${DB_AUTH_METHOD}
