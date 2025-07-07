@@ -1,4 +1,4 @@
-FROM skillsharp123/jayce:v1.0.55
+FROM skillsharp123/jayce:v1.0.56
 
 WORKDIR /app
 
