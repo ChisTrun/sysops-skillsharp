@@ -2,6 +2,7 @@ server:
   host: 0.0.0.0
   port: 8081
   gwport: 8080
+  sseport: 8079
 
 karma:
   genurl: "https://skillsharp-api.icu/karma/lip-sync"
@@ -51,6 +52,8 @@ worker:
   max_task_wait_time: 10
 
 questions_to_prepare: 1
+
+question_timeout: 120
 
 page_size: 10
 
