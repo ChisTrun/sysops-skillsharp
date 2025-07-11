@@ -1,4 +1,4 @@
-FROM skillsharp123/irelia:v1.1.5
+FROM skillsharp123/irelia:v1.1.6
 
 WORKDIR /app
 
