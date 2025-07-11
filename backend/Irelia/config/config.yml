@@ -55,6 +55,8 @@ questions_to_prepare: 1
 
 question_timeout: 120
 
+demo_data_dir: /app/demo
+
 page_size: 10
 
 context_qa_length: 5
