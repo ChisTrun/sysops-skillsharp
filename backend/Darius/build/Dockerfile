@@ -1,3 +1,3 @@
-FROM skillsharp123/darius:v1.9.2
+FROM skillsharp123/darius:v1.9.3
 
 CMD ["./darius"]
