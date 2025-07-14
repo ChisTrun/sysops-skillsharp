@@ -1,4 +1,4 @@
-FROM skillsharp123/bulbasaur:v1.4.6
+FROM skillsharp123/bulbasaur:v1.4.7
 
 WORKDIR /app
 
