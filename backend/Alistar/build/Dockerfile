@@ -8,7 +8,7 @@ COPY ./config /data/ratelimit/config
 # Biến môi trường cần thiết
 ENV LOG_LEVEL=debug \
     REDIS_SOCKET_TYPE=tcp \
-    REDIS_URL=redis://:Skillsharp%40123@10.128.0.2:6379 \
+    REDIS_URL=redis://:Skillsharp%40123@10.128.0.3:6379 \
     RUNTIME_ROOT=/data \
     RUNTIME_SUBDIRECTORY=ratelimit \
     RUNTIME_WATCH_ROOT=false \
