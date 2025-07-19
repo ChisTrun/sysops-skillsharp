@@ -447,7 +447,7 @@ static_resources:
                           route:
                             cluster: darius_cluster
                             prefix_rewrite: /
-                            timeout: 60s
+                            timeout: 600s
                             rate_limits:
                               - actions:
                                   - request_headers:
